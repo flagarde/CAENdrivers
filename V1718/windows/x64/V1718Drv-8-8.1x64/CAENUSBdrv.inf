@@ -1,0 +1,116 @@
+;===========================================================
+; File    : CAENUSBdrv.inf
+;
+; Abstract: Windows 2000/XP/7 INF for CAEN FE Boards 
+;           with USB Interface 
+;
+; (c) Copyright 2010 CAEN SpA 
+;
+;===========================================================
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+provider=%CAENUSB_Provider%
+CatalogFile=CAENV1718drv.cat
+DriverVer=02/02/2010,3.4.2.147
+
+[SourceDisksNames]
+1=%CAENUSB_Install%,,,
+
+[SourceDisksFiles]
+CAENV1718drv.sys = 1
+
+[DestinationDirs]
+CAENUSB.Files.Ext = 10,System32\Drivers
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[Manufacturer]
+%CAENUSB_Provider%=Device,NT,NTx86,NTamd64
+
+;for all platforms
+[Device]
+%VID_0547&PID_1002.DeviceDesc%=CAENUSB, USB\VID_0547&PID_1002
+
+;for windows 2000 non intel platforms
+[Device.NT]
+%VID_0547&PID_1002.DeviceDesc%=CAENUSB, USB\VID_0547&PID_1002
+
+;for x86 platforms
+[Device.NTx86]
+%VID_0547&PID_1002.DeviceDesc%=CAENUSB, USB\VID_0547&PID_1002
+
+
+;for x64 platforms
+[Device.NTamd64]
+%VID_0547&PID_1002.DeviceDesc%=CAENUSB, USB\VID_0547&PID_1002
+
+[CAENUSB.NT]
+CopyFiles=CAENUSB.Files.Ext
+AddReg=CAENUSB.AddReg
+
+[CAENUSB.NT.HW]
+AddReg=CAENUSB.AddReg.Guid
+
+[CAENUSB.NT.Services]
+Addservice = CAENUSB,2,CAENUSB.AddService
+
+
+[CAENUSB.NTx86]
+CopyFiles=CAENUSB.Files.Ext
+AddReg=CAENUSB.AddReg
+
+[CAENUSB.NTx86.HW]
+AddReg=CAENUSB.AddReg.Guid
+
+[CAENUSB.NTx86.Services]
+Addservice = CAENUSB,2,CAENUSB.AddService
+
+[CAENUSB.NTamd64]
+CopyFiles=CAENUSB.Files.Ext
+AddReg=CAENUSB.AddReg
+
+[CAENUSB.NTamd64.HW]
+AddReg=CAENUSB.AddReg.Guid
+
+[CAENUSB.NTamd64.Services]
+Addservice = CAENUSB,2,CAENUSB.AddService
+
+
+[CAENUSB.AddReg]
+; Deprecating - do not use in new apps to identify a CAENUSB driver
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,CAENV1718drv.sys
+; You may optionally include a check for DriverBase in your application to check for a CAENUSB driver
+HKR,,DriverBase,,CAENV1718drv.sys
+HKR,"Parameters","MaximumTransferSize",0x10001,4096
+HKR,"Parameters","DebugLevel",0x10001,2
+HKR,,FriendlyName,,%CAENUSB_Description%
+
+[CAENUSB.AddService]
+DisplayName    = %CAENUSB_Description%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\CAENV1718drv.sys
+AddReg         = CAENUSB.AddReg
+LoadOrderGroup = Base
+
+[CAENUSB.Files.Ext]
+CAENV1718drv.sys
+
+[CAENUSB.AddReg.Guid]
+HKR,,DriverGUID,,%CAENUSB.GUID%
+
+[Strings]
+CAENUSB_Provider    = "CAEN S.p.A."
+CAENUSB_Company     = "CAEN S.p.A."
+CAENUSB_Description = "CAEN V1718 USB-VME Bridge Driver (caenusbdrv.sys)"
+CAENUSB_DisplayName = "CAEN V1718 USB-VME Bridge Driver"
+CAENUSB_Install     = "CAEN V1718 USB-VME Bridge Driver Installation Disk"
+VID_0547&PID_1002.DeviceDesc = "CAEN V1718 USB-VME Bridge"
+CAENUSB.GUID="{A4225514-9CEC-49cd-BB1E-E777EFA1CA6B}"
+CAENUSB_Unused      = "."

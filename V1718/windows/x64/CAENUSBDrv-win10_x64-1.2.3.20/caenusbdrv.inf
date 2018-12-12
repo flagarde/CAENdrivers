@@ -1,0 +1,139 @@
+; Installation INF for the Cypress Generic USB Driver for %OPERATING_SYSTEM%
+; Processor support for %PLATFORM% platforms.
+;
+; (c) Copyright 2017 Cypress Semiconductor Corporation
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+provider=%CAENUSB3_Provider%
+CatalogFile=CAENUSB3.cat
+DriverVer=11/08/2017,1.2.3.20
+
+[SourceDisksNames]
+1=%CAENUSB3_Install%,,,
+
+[SourceDisksFiles]
+CYUSB3.sys = 1
+;
+
+
+[DestinationDirs]
+CYUSB3.Files.Ext = 10,System32\Drivers
+CoInstaller_CopyFiles = 11
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[Manufacturer]
+%CAENUSB3_Provider%=Device,NTx86,NTamd64
+
+;for x86 platforms
+[Device.NTx86]
+%VID_21E1&PID_0000.DeviceDesc%=CyUsb3, USB\VID_21E1&PID_0000
+%VID_21E1&PID_0001.DeviceDesc%=CyUsb3, USB\VID_21E1&PID_0001
+%VID_21E1&PID_0005.DeviceDesc%=CyUsb3, USB\VID_21E1&PID_0005
+%VID_21E1&PID_0015.DeviceDesc%=CyUsb3, USB\VID_21E1&PID_0015
+%VID_0547&PID_1002.DeviceDesc%=CyUsb3, USB\VID_0547&PID_1002
+
+
+;for x64 platforms
+[Device.NTamd64]
+%VID_21E1&PID_0000.DeviceDesc%=CyUsb3, USB\VID_21E1&PID_0000
+%VID_21E1&PID_0001.DeviceDesc%=CyUsb3, USB\VID_21E1&PID_0001
+%VID_21E1&PID_0005.DeviceDesc%=CyUsb3, USB\VID_21E1&PID_0005
+%VID_21E1&PID_0015.DeviceDesc%=CyUsb3, USB\VID_21E1&PID_0015
+%VID_0547&PID_1002.DeviceDesc%=CyUsb3, USB\VID_0547&PID_1002
+
+[CYUSB3.NTx86]
+CopyFiles=CYUSB3.Files.Ext
+AddReg=CyUsb3.AddReg
+
+[CYUSB3.NTx86.HW]
+AddReg=CYUSB3.AddReg.Guid
+
+[CYUSB3.NTx86.Services]
+Addservice = CYUSB3,2,CYUSB3.AddService
+
+[CYUSB3.NTamd64]
+CopyFiles=CYUSB3.Files.Ext
+AddReg=CyUsb3.AddReg
+
+[CYUSB3.NTamd64.HW]
+AddReg=CYUSB3.AddReg.Guid
+
+[CYUSB3.NTamd64.Services]
+Addservice = CYUSB3,2,CYUSB3.AddService
+
+
+[CYUSB3.AddReg]
+; Deprecating - do not use in new apps to identify a CYUSB3 driver
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,CYUSB3.sys
+; You may optionally include a check for DriverBase in your application to check for a CYUSB3 driver
+HKR,,DriverBase,,CYUSB3.sys
+HKR,"Parameters","MaximumTransferSize",0x10001,4096
+HKR,"Parameters","DebugLevel",0x10001,2
+HKR,,FriendlyName,,%CAENUSB3_Description%
+
+[CYUSB3.AddService]
+DisplayName    = %CAENUSB3_Description%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\CYUSB3.sys
+AddReg         = CYUSB3.AddReg
+LoadOrderGroup = Base
+
+[CYUSB3.Files.Ext]
+CYUSB3.sys
+
+[CYUSB3.AddReg.Guid]
+HKR,,DriverGUID,,%CAENUSB3.GUID%
+;HKR,,DriverPowerPolicySetup,,%ENABLE_DRIVER_POWER_POLICY%
+
+;-------------- WDF Coinstaller installation
+[CYUSB3.NTamd64.CoInstallers]
+AddReg=CoInstaller_AddReg
+CopyFiles=CoInstaller_CopyFiles
+
+[CYUSB3.NTx86.CoInstallers]
+AddReg=CoInstaller_AddReg
+CopyFiles=CoInstaller_CopyFiles
+
+[CoInstaller_CopyFiles]
+;
+
+
+[CoInstaller_AddReg]
+;
+
+
+[CYUSB3.NTamd64.Wdf]
+KmdfService = CYUSB3, CYUSB3_wdfsect
+
+[CYUSB3.NTx86.Wdf]
+KmdfService = CYUSB3, CYUSB3_wdfsect
+
+[CYUSB3_wdfsect]
+KmdfLibraryVersion = 1.15
+
+
+[Strings]
+CAENUSB3_Provider    = "CAEN S.p.A."
+CAENUSB3_Company     = "CAEN S.p.A."
+CAENUSB3_Description = "CAEN Desktop/NIM Carrier Driver"
+CAENUSB3_DisplayName = "CAEN Desktop/NIM Carrier Driver"
+CAENUSB3_Install     = "CAEN Desktop/NIM Carrier Driver Installation Disk"
+
+VID_21E1&PID_0000.DeviceDesc= "CAEN Desktop Waveform Digitizers Carrier"
+VID_21E1&PID_0001.DeviceDesc= "CAEN NIM Waveform Digitizers Carrier"
+VID_21E1&PID_0005.DeviceDesc= "CAEN DT55xx HV Desktop Power Supply Carrier"
+VID_21E1&PID_0015.DeviceDesc= "CAEN Peak Sensing ADC"
+VID_0547&PID_1002.DeviceDesc= "CAEN V1718 USB-VME Bridge"
+
+CAENUSB3.GUID="{A4225514-9CEC-49cd-BB1E-E777EFA1CA6B}"
+;ENABLE_DRIVER_POWER_POLICY="1"
+CYUSB3_Unused      = "."

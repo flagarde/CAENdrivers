@@ -1,0 +1,111 @@
+;===========================================================
+;
+; File    : A2818.inf
+;
+; Abstract: Windows INF for CAEN PCI A2818 boards
+;
+;===========================================================
+
+
+[Version]
+Signature         = $Windows NT$
+Provider          = %PLX%
+Class             = Unknown
+ClassGuid         = {4d36e97e-e325-11ce-bfc1-08002be10318}
+DriverVer         = 06/01/2009, 6.3.1.0
+CatalogFile		  = A2818Drv.cat
+DriverPackageType = PlugAndPlay
+
+
+
+[Manufacturer]
+%PLX% = PLX.Mfg, NTamd64
+
+
+;-----------------------------------------------------------
+; Device identification for 64-bit Windows x64
+;-----------------------------------------------------------
+[PLX.Mfg.NTamd64]
+
+"CAEN PCI A2818 Board (64-bit)"		        = DDInstall_9054, PCI\VEN_10b5&DEV_9054
+
+
+;-----------------------------------------------------------
+; CopyFiles section
+;
+; Flags: 0x00000004 = COPYFLG_NOVERSIONCHECK
+;-----------------------------------------------------------
+
+
+
+[CopyFiles_9054]
+A2818.sys,,,0x00000004
+
+
+;-----------------------------------------------------------
+; Driver installation section
+;
+; NOTE:  To enable file copy for distribution, remove the
+;        comment symbol (;) from each "CopyFiles" line.
+;-----------------------------------------------------------
+
+
+
+[DDInstall_9054.NT]
+AddReg    = AddRegistry_NT_9054
+CopyFiles = CopyFiles_9054
+
+
+
+;-----------------------------------------------------------
+; AddService section
+;-----------------------------------------------------------
+
+[DDInstall_9054.NT.Services]
+AddService = Plx9054, 0x00000002, Service_Inst_9054
+
+
+;-----------------------------------------------------------
+; AddRegistry section
+;-----------------------------------------------------------
+
+[AddRegistry_NT_9054]
+HKLM,System\CurrentControlSet\Services\Plx9054,CommonBufferSize,0x00010003,0x10000
+
+
+
+;-----------------------------------------------------------
+; Service installation section
+;-----------------------------------------------------------
+
+[Service_Inst_9054]
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 0                  ; SERVICE_ERROR_IGNORE
+ServiceBinary  = %12%\A2818.sys
+
+
+;-----------------------------------------------------------
+; Source file information
+;-----------------------------------------------------------
+
+[SourceDisksNames]
+1 = %InstallDisk%
+
+[SourceDisksFiles]
+A2818.sys = 1
+
+
+[DestinationDirs]
+;CopyFiles_ApiDll = 16425      ;16425 = %WinDir%\System32 (supports WOW64)
+DefaultDestDir   = 12          ;12    = Drivers Directory
+
+
+
+;-----------------------------------------------------------
+; String information
+;-----------------------------------------------------------
+
+[Strings]
+InstallDisk = "CAEN Installation Disk"
+PLX         = "CAEN S.p.A."

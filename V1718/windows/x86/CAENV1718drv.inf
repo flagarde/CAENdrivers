@@ -1,0 +1,120 @@
+;===========================================================
+; File    : V1718.inf
+;
+; Abstract: Windows 2000/XP/7 INF for CAEN FE Boards 
+;           with USB Interface 
+;
+; (c) Copyright 2016 CAEN SpA 
+;
+;===========================================================
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+provider=%V1718_Provider%
+CatalogFile=CAENV1718drv.cat
+DriverVer=06/06/2016,3.4.7
+
+[SourceDisksNames]
+1=%V1718_Install%,,,
+
+[SourceDisksFiles]
+CAENV1718drv.sys = 1
+
+[DestinationDirs]
+V1718.Files.Ext = 10,System32\Drivers
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[Manufacturer]
+%V1718_Provider%=Device,NT,NTx86,NTamd64
+
+;for all platforms
+[Device]
+%VID_0547&PID_1002.DeviceDesc%=V1718, USB\VID_0547&PID_1002
+
+
+
+;for windows 2000 non intel platforms
+[Device.NT]
+%VID_0547&PID_1002.DeviceDesc%=V1718, USB\VID_0547&PID_1002
+
+
+;for x86 platforms
+[Device.NTx86]
+%VID_0547&PID_1002.DeviceDesc%=V1718, USB\VID_0547&PID_1002
+
+
+;for x64 platforms
+[Device.NTamd64]
+%VID_0547&PID_1002.DeviceDesc%=V1718, USB\VID_0547&PID_1002
+
+[V1718.NT]
+CopyFiles=V1718.Files.Ext
+AddReg=V1718.AddReg
+
+[V1718.NT.HW]
+AddReg=V1718.AddReg.Guid
+
+[V1718.NT.Services]
+Addservice = V1718,2,V1718.AddService
+
+
+[V1718.NTx86]
+CopyFiles=V1718.Files.Ext
+AddReg=V1718.AddReg
+
+[V1718.NTx86.HW]
+AddReg=V1718.AddReg.Guid
+
+[V1718.NTx86.Services]
+Addservice = V1718,2,V1718.AddService
+
+[V1718.NTamd64]
+CopyFiles=V1718.Files.Ext
+AddReg=V1718.AddReg
+
+[V1718.NTamd64.HW]
+AddReg=V1718.AddReg.Guid
+
+[V1718.NTamd64.Services]
+Addservice = V1718,2,V1718.AddService
+
+
+[V1718.AddReg]
+; Deprecating - do not use in new apps to identify a V1718 driver
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,CAENV1718drv.sys
+; You may optionally include a check for DriverBase in your application to check for a V1718 driver
+HKR,,DriverBase,,CAENV1718drv.sys
+HKR,"Parameters","MaximumTransferSize",0x10001,4096
+HKR,"Parameters","DebugLevel",0x10001,2
+HKR,,FriendlyName,,%V1718_Description%
+
+[V1718.AddService]
+DisplayName    = %V1718_Description%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\CAENV1718drv.sys
+AddReg         = V1718.AddReg
+LoadOrderGroup = Base
+
+[V1718.Files.Ext]
+CAENV1718drv.sys
+
+[V1718.AddReg.Guid]
+HKR,,DriverGUID,,%V1718.GUID%
+
+[Strings]
+V1718_Provider    = "CAEN S.p.A."
+V1718_Company     = "CAEN S.p.A."
+V1718_Description = "CAEN V1718 USB-VME Bridge Driver (CAENV1718drv.sys)"
+V1718_DisplayName = "CAEN V1718 USB-VME Bridge Driver"
+V1718_Install     = "CAEN V1718 USB-VME Bridge Driver Installation Disk"
+VID_0547&PID_1002.DeviceDesc="CAEN V1718 USB-VME Bridge"
+V1718.GUID="{A4225514-9CEC-49cd-BB1E-E777EFA1CA6B}"
+V1718_Unused      = "."
+
