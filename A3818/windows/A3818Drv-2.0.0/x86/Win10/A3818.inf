@@ -1,0 +1,105 @@
+;
+; A3818.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=CONET2 Controller
+ClassGuid={7D0CB204-B5F5-4458-86B6-053D37CC3D9E}
+Provider=%ManufacturerName%
+CatalogFile=A3818.cat
+DriverVer=11/15/2017,2.0
+
+[DestinationDirs]
+DefaultDestDir = 12
+
+; ================= Class section =====================
+
+[ClassInstall32]
+Addreg=CaenClassReg
+
+[CaenClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-5
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+A3818.sys  = 1,,
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NTx86
+
+[Standard.NTx86]
+%A3818.DeviceDesc%=A3818_Device, PCI\VEN_10EE&DEV_1015&SUBSYS_000710EE&REV_00 ;VID/DID/SID/SVID
+
+[A3818_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+A3818.sys
+
+;-------------- Service installation
+[A3818_Device.NT.Services]
+AddService = A3818,%SPSVCINST_ASSOCSERVICE%, A3818_Service_Inst
+
+; -------------- A3818 driver install sections
+[A3818_Service_Inst]
+DisplayName    = %A3818.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\A3818.sys
+LoadOrderGroup = Extended Base
+
+;
+;--- A3818_Device Coinstaller installation ------
+;
+
+[DestinationDirs]
+A3818_Device_CoInstaller_CopyFiles = 11
+
+[A3818_Device.NT.CoInstallers]
+AddReg=A3818_Device_CoInstaller_AddReg
+CopyFiles=A3818_Device_CoInstaller_CopyFiles
+
+[A3818_Device_CoInstaller_AddReg]
+;
+
+
+[A3818_Device_CoInstaller_CopyFiles]
+;
+
+
+[SourceDisksFiles]
+;
+
+
+[A3818_Device.NT.Wdf]
+KmdfService =  A3818, A3818_wdfsect
+[A3818_wdfsect]
+KmdfLibraryVersion = 1.15
+
+[A3818_Device.NT.HW]
+;AddReg=MSI_Interrupts
+Include=machine.inf
+Needs = PciASPMOptOut
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="CAEN SpA" 
+ClassName="CAEN SpA" 
+DiskName = "A3818 Installation Disk"
+A3818.DeviceDesc = "A3818 PCiE Card Driver"
+A3818.SVCDESC = "A3818 PCiE Card Service"
+
+[MSI_Interrupts]
+HKR,Interrupt Management,,0x00000010
+HKR,Interrupt Management\MessageSignaledInterruptProperties,,0x00000010
+HKR,Interrupt Management\MessageSignaledInterruptProperties,MSISupported,0x00010001,1
+HKR,Interrupt Management\MessageSignaledInterruptProperties,MessageNumberLimit,0x00010001,1
