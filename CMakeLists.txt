@@ -6,8 +6,6 @@ option(V1718 "Compile and install CAEN V1718 Driver" ON)
 option(A2818 "Compile and install CAEN A2818 Driver" ON)
 option(A3818 "Compile and install CAEN A3818 Driver" ON)
 
-math(EXPR BITS "8*${CMAKE_SIZEOF_VOID_P}")
-
 if(V1718)
     add_subdirectory(V1718)
 endif()
