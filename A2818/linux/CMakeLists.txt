@@ -4,13 +4,16 @@ cmake_minimum_required(VERSION 3.1)
 ########################################################
 
 project(A2818)
+add_executable(A2818 ${CMAKE_SOURCE_DIR}/cmake/empty.cpp)
+                   
+
 set(DIR "${CMAKE_SOURCE_DIR}/A2818/linux/A2818Drv-1.20")
 
 
 execute_process(COMMAND ls /dev/a2818_* OUTPUT_VARIABLE A2818_DETECTED OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_QUIET ERROR_QUIET)
 if ("${A2818_DETECTED}" STREQUAL "")
  message("-- A2818 not detected ! Abording compilation")
- add_custom_target(A2818 COMMAND "")
+ add_custom_command(TARGET A2818 PRE_BUILD COMMAND "")
 else()
     message("-- A2818 devices detected")
     string(SUBSTRING ${CMAKE_HOST_SYSTEM_VERSION} 0 4 LINUX_VERSION)
@@ -26,10 +29,11 @@ else()
     endif()
     message("-- ${CAEN_DRIVERS_MAKEFILE}")
     message("-- ${CAEN_DRIVERS_SCRIPT}")
-    add_custom_target(A2818
+    add_custom_command(TARGET A2818 PRE_BUILD 
                   COMMAND "sudo" "make" "--makefile=${CAEN_DRIVERS_MAKEFILE}" "--directory=${DIR}" 
                   COMMAND "sudo" "sh" "${CAEN_DRIVERS_SCRIPT}"
                   COMMAND "sudo" "make" "--makefile=${CAEN_DRIVERS_MAKEFILE}" "--directory=${DIR}" "clean"
               WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/build"
                   )
+    install(TARGETS A2818 DESTINATION  ${CMAKE_BINARY_DIR} OPTIONAL )
 endif()
