@@ -17,7 +17,6 @@ else()
                   COMMAND "sudo" "make" "--makefile=${CAEN_DRIVERS_MAKEFILE}" "--directory=${DIR}" 
                   COMMAND "sudo" "make" "--makefile=${CAEN_DRIVERS_MAKEFILE}" "--directory=${DIR}" "install"
                   COMMAND "sudo" "make" "--makefile=${CAEN_DRIVERS_MAKEFILE}" "--directory=${DIR}" "clean"
-              WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/build"
                   )
     install(TARGETS A3818 DESTINATION  ${CMAKE_BINARY_DIR} OPTIONAL )
 endif()

@@ -21,5 +21,4 @@ endif()
 
 add_custom_target(V1718 
                   COMMAND "pnputil -i -a ${DIR}" 
-                  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/build"
                  )

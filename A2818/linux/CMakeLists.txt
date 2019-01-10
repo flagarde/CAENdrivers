@@ -33,7 +33,6 @@ else()
                   COMMAND "sudo" "make" "--makefile=${CAEN_DRIVERS_MAKEFILE}" "--directory=${DIR}" 
                   COMMAND "sudo" "sh" "${CAEN_DRIVERS_SCRIPT}"
                   COMMAND "sudo" "make" "--makefile=${CAEN_DRIVERS_MAKEFILE}" "--directory=${DIR}" "clean"
-              WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/build"
                   )
     install(TARGETS A2818 DESTINATION  ${CMAKE_BINARY_DIR} OPTIONAL )
 endif()

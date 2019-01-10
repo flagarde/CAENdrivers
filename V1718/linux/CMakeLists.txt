@@ -9,7 +9,6 @@ add_custom_command(TARGET V1718 PRE_BUILD
                   COMMAND "sudo" "make" "--directory=${CMAKE_SOURCE_DIR}/V1718/linux/CAENUSBdrvB-1.5.2/" 
                   COMMAND "sudo" "make" "--directory=${CMAKE_SOURCE_DIR}/V1718/linux/CAENUSBdrvB-1.5.2/" "install" 
                   COMMAND "sudo" "make" "--directory=${CMAKE_SOURCE_DIR}/V1718/linux/CAENUSBdrvB-1.5.2/" "clean" 
-                  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/build"
                    )
                    
 install(TARGETS V1718 DESTINATION  ${CMAKE_BINARY_DIR} OPTIONAL )
